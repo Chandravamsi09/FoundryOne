@@ -1,0 +1,36 @@
+/* Responsive design adjustments */
+
+/* Role selector mobile */
+@media (max-width: 640px) {
+  .role-card {
+    min-height: 80px;
+  }
+}
+
+/* Stat cards on small screens */
+@media (max-width: 640px) {
+  .stat-card-value {
+    font-size: 1.5rem;
+  }
+}
+
+/* Prevent horizontal overflow */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Improve touch targets on mobile */
+@media (hover: none) and (pointer: coarse) {
+  button, a, input, select, textarea {
+    min-height: 44px;
+  }
+}
+
+/* Sidebar on mobile */
+@media (max-width: 768px) {
+  .sidebar-mobile {
+    width: 100%;
+    max-width: 320px;
+  }
+}
