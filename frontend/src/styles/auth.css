@@ -1,0 +1,9 @@
+/* Auth page specific styles */
+.auth-card {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.auth-title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
