@@ -13,21 +13,16 @@ const ClientLogin = React.lazy(() => import('../pages/ClientLogin'));
 const Register = React.lazy(() => import('../pages/Register'));
 
 const AdminDashboard = React.lazy(() => import('../pages/admin/AdminDashboard'));
+const AdminUsers = React.lazy(() => import('../pages/admin/AdminUsers'));
+const AdminOrganizations = React.lazy(() => import('../pages/admin/AdminOrganizations'));
+const AdminProjects = React.lazy(() => import('../pages/admin/AdminProjects'));
+const AdminReports = React.lazy(() => import('../pages/admin/AdminReports'));
+const AdminAnalytics = React.lazy(() => import('../pages/admin/AdminAnalytics'));
+const AdminSettings = React.lazy(() => import('../pages/admin/AdminSettings'));
+const AdminAuditLogs = React.lazy(() => import('../pages/admin/AdminAuditLogs'));
 const EmployeeDashboard = React.lazy(() => import('../pages/employee/EmployeeDashboard'));
 const ManagerDashboard = React.lazy(() => import('../pages/manager/ManagerDashboard'));
 const ClientDashboard = React.lazy(() => import('../pages/client/ClientDashboard'));
-const ClientProjects = React.lazy(() => import('../pages/client/projects/ClientProjects'));
-const ClientProjectDetail = React.lazy(() => import('../pages/client/projects/ClientProjectDetail'));
-const ClientContracts = React.lazy(() => import('../pages/client/contracts/ClientContracts'));
-const ClientContractDetail = React.lazy(() => import('../pages/client/contracts/ClientContractDetail'));
-const ClientInvoices = React.lazy(() => import('../pages/client/invoices/ClientInvoices'));
-const ClientInvoiceDetail = React.lazy(() => import('../pages/client/invoices/ClientInvoiceDetail'));
-const ClientPayments = React.lazy(() => import('../pages/client/payments/ClientPayments'));
-const ClientSupport = React.lazy(() => import('../pages/client/support/ClientSupport'));
-const ClientSupportCreate = React.lazy(() => import('../pages/client/support/ClientSupportCreate'));
-const ClientSupportDetail = React.lazy(() => import('../pages/client/support/ClientSupportDetail'));
-const ClientProfile = React.lazy(() => import('../pages/client/profile/ClientProfile'));
-const ClientNotifications = React.lazy(() => import('../pages/client/notifications/ClientNotifications'));
 
 const LazyWrapper = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-slate-50"><LoadingSpinner size="lg" /></div>}>
@@ -59,6 +54,13 @@ export default function AppRoutes() {
 
       <Route element={<ProtectedRoute allowedRoles={[ROLES.ADMIN]} />}>
         <Route path={ROUTES.ADMIN_DASHBOARD} element={<LazyWrapper><AdminDashboard /></LazyWrapper>} />
+        <Route path={ROUTES.ADMIN_USERS} element={<LazyWrapper><AdminUsers /></LazyWrapper>} />
+        <Route path={ROUTES.ADMIN_ORGANIZATIONS} element={<LazyWrapper><AdminOrganizations /></LazyWrapper>} />
+        <Route path={ROUTES.ADMIN_PROJECTS} element={<LazyWrapper><AdminProjects /></LazyWrapper>} />
+        <Route path={ROUTES.ADMIN_REPORTS} element={<LazyWrapper><AdminReports /></LazyWrapper>} />
+        <Route path={ROUTES.ADMIN_ANALYTICS} element={<LazyWrapper><AdminAnalytics /></LazyWrapper>} />
+        <Route path={ROUTES.ADMIN_SETTINGS} element={<LazyWrapper><AdminSettings /></LazyWrapper>} />
+        <Route path={ROUTES.ADMIN_AUDIT_LOGS} element={<LazyWrapper><AdminAuditLogs /></LazyWrapper>} />
       </Route>
       <Route element={<ProtectedRoute allowedRoles={[ROLES.EMPLOYEE]} />}>
         <Route path={ROUTES.EMPLOYEE_DASHBOARD} element={<LazyWrapper><EmployeeDashboard /></LazyWrapper>} />
@@ -68,18 +70,6 @@ export default function AppRoutes() {
       </Route>
       <Route element={<ProtectedRoute allowedRoles={[ROLES.CLIENT]} />}>
         <Route path={ROUTES.CLIENT_DASHBOARD} element={<LazyWrapper><ClientDashboard /></LazyWrapper>} />
-        <Route path={ROUTES.CLIENT_PROJECTS} element={<LazyWrapper><ClientProjects /></LazyWrapper>} />
-        <Route path={ROUTES.CLIENT_PROJECT_DETAIL} element={<LazyWrapper><ClientProjectDetail /></LazyWrapper>} />
-        <Route path={ROUTES.CLIENT_CONTRACTS} element={<LazyWrapper><ClientContracts /></LazyWrapper>} />
-        <Route path={ROUTES.CLIENT_CONTRACT_DETAIL} element={<LazyWrapper><ClientContractDetail /></LazyWrapper>} />
-        <Route path={ROUTES.CLIENT_INVOICES} element={<LazyWrapper><ClientInvoices /></LazyWrapper>} />
-        <Route path={ROUTES.CLIENT_INVOICE_DETAIL} element={<LazyWrapper><ClientInvoiceDetail /></LazyWrapper>} />
-        <Route path={ROUTES.CLIENT_PAYMENTS} element={<LazyWrapper><ClientPayments /></LazyWrapper>} />
-        <Route path={ROUTES.CLIENT_SUPPORT} element={<LazyWrapper><ClientSupport /></LazyWrapper>} />
-        <Route path={ROUTES.CLIENT_SUPPORT_CREATE} element={<LazyWrapper><ClientSupportCreate /></LazyWrapper>} />
-        <Route path={ROUTES.CLIENT_SUPPORT_DETAIL} element={<LazyWrapper><ClientSupportDetail /></LazyWrapper>} />
-        <Route path={ROUTES.CLIENT_PROFILE} element={<LazyWrapper><ClientProfile /></LazyWrapper>} />
-        <Route path={ROUTES.CLIENT_NOTIFICATIONS} element={<LazyWrapper><ClientNotifications /></LazyWrapper>} />
       </Route>
 
       <Route path="*" element={<Navigate to={ROUTES.LANDING} replace />} />
