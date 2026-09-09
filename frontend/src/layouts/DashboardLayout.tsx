@@ -13,16 +13,28 @@ interface DashboardLayoutProps {
   title: string;
   navItems: NavItem[];
   children: React.ReactNode;
+  role?: string;
 }
 
-export default function DashboardLayout({ title, navItems, children }: DashboardLayoutProps) {
-  const { user, role, logout } = useAuth();
+export default function DashboardLayout({ title, navItems, children, role }: DashboardLayoutProps) {
+  const { user, role: authRole, logout } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const getLogoutPath = () => {
+    const currentRole = role || authRole;
+    switch (currentRole) {
+      case 'admin': return '/login/admin';
+      case 'employee': return '/login/employee';
+      case 'manager': return '/login/manager';
+      case 'client': return '/login/client';
+      default: return '/role-selection';
+    }
+  };
+
   const handleLogout = async () => {
     await logout();
-    navigate('/login/admin');
+    navigate(getLogoutPath());
   };
 
   return (
