@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { APP_NAME, ROLE_LABELS } from '../types/constants';
+import { APP_NAME, ROLE_LABELS, ROLE_LOGIN_ROUTES } from '../types/constants';
 
 interface NavItem {
   path: string;
@@ -22,7 +22,8 @@ export default function DashboardLayout({ title, navItems, children }: Dashboard
 
   const handleLogout = async () => {
     await logout();
-    navigate('/login/admin');
+    const loginRoute = role ? ROLE_LOGIN_ROUTES[role as keyof typeof ROLE_LOGIN_ROUTES] || '/login/admin' : '/login/admin';
+    navigate(loginRoute);
   };
 
   return (
