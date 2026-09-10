@@ -55,7 +55,22 @@ export const ROUTES = {
   ADMIN_ANALYTICS: '/admin/analytics',
   ADMIN_SETTINGS: '/admin/settings',
   ADMIN_AUDIT_LOGS: '/admin/audit-logs',
+  EMPLOYEE_TASKS: '/employee/tasks',
+  EMPLOYEE_TASK_DETAILS: '/employee/tasks/:id',
+  EMPLOYEE_PROJECTS: '/employee/projects',
+  EMPLOYEE_PROJECT_DETAILS: '/employee/projects/:id',
+  EMPLOYEE_ATTENDANCE: '/employee/attendance',
+  EMPLOYEE_LEAVE: '/employee/leave',
+  EMPLOYEE_NOTIFICATIONS: '/employee/notifications',
+  EMPLOYEE_PROFILE: '/employee/profile',
 } as const;
+
+export const ROLE_LOGIN_ROUTES: Record<Role, string> = {
+  [ROLES.ADMIN]: ROUTES.ADMIN_LOGIN,
+  [ROLES.EMPLOYEE]: ROUTES.EMPLOYEE_LOGIN,
+  [ROLES.MANAGER]: ROUTES.MANAGER_LOGIN,
+  [ROLES.CLIENT]: ROUTES.CLIENT_LOGIN,
+};
 
 export const AUTH_STORAGE_KEY = 'foundryone_auth';
 export const TOKEN_KEY = 'foundryone_token';
