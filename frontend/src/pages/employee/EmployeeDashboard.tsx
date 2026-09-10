@@ -1,61 +1,104 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../../layouts/DashboardLayout';
+import StatCard from '../../components/employee/StatCard';
+import Section from '../../components/employee/Section';
+import StatusBadge from '../../components/employee/StatusBadge';
+import employeeService from '../../services/employeeService';
+import { ROUTES } from '../../types/constants';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import ErrorMessage from '../../components/ErrorMessage';
+import { DashboardStats, Task, Project, Notification } from '../../types/employee';
 
 const navItems = [
-  { path: '/employee/dashboard', label: 'Dashboard', icon: '📊' },
+  { path: ROUTES.EMPLOYEE_DASHBOARD, label: 'Dashboard', icon: '📊' },
   { path: '/employee/projects', label: 'My Projects', icon: '🚀' },
   { path: '/employee/tasks', label: 'My Tasks', icon: '✅' },
-  { path: '/employee/team', label: 'Team', icon: '👥' },
-  { path: '/employee/messages', label: 'Messages', icon: '💬' },
+  { path: '/employee/tasks/board', label: 'Task Board', icon: '📋' },
+  { path: '/employee/attendance', label: 'Attendance', icon: '📅' },
+  { path: '/employee/leave', label: 'Leave', icon: '🏖️' },
   { path: '/employee/notifications', label: 'Notifications', icon: '🔔' },
   { path: '/employee/profile', label: 'Profile', icon: '👤' },
 ];
 
-const StatCard = ({ title, value, color = 'blue' }: { title: string; value: string; color?: string }) => {
-  const colors: Record<string, string> = { blue: 'bg-blue-50 text-blue-600', green: 'bg-green-50 text-green-600', purple: 'bg-purple-50 text-purple-600', orange: 'bg-orange-50 text-orange-600' };
-  const emojis: Record<string, string> = { blue: '🚀', green: '✅', purple: '⏳', orange: '📋' };
-  return (
-    <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-white/40 p-5 shadow-sm hover:shadow-lg transition-shadow">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-slate-500">{title}</p>
-          <p className="text-2xl font-bold text-slate-900 mt-1">{value}</p>
-        </div>
-        <div className={`w-11 h-11 rounded-xl ${colors[color]} flex items-center justify-center text-xl`}>{emojis[color]}</div>
-      </div>
-    </div>
-  );
-};
-
-const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-white/40 p-5 shadow-sm">
-    <h3 className="text-base font-semibold text-slate-900 mb-4">{title}</h3>
-    {children}
-  </div>
-);
-
 export default function EmployeeDashboard() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [recentTasks, setRecentTasks] = useState<Task[]>([]);
+  const [recentProjects, setRecentProjects] = useState<Project[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        const [statsData, tasksData, projectsData, notifsData] = await Promise.all([
+          employeeService.getDashboardStats(),
+          employeeService.getTasks({ limit: 5, sortBy: 'createdAt', sortOrder: 'desc' }),
+          employeeService.getProjects(),
+          employeeService.getNotifications(),
+        ]);
+        setStats(statsData);
+        setRecentTasks(tasksData.data);
+        setRecentProjects(projectsData.slice(0, 3));
+        setNotifications(notifsData.slice(0, 5));
+      } catch (err) {
+        setError('Failed to load dashboard data');
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  if (loading) {
+    return (
+      <DashboardLayout title="Employee Dashboard" navItems={navItems}>
+        <div className="flex items-center justify-center h-64">
+          <LoadingSpinner size="lg" />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout title="Employee Dashboard" navItems={navItems}>
+      {error && <ErrorMessage message={error} className="mb-6" />}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-slate-900">Welcome, Employee</h2>
         <p className="text-sm text-slate-500 mt-1">Here is your work overview</p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard title="My Projects" value="8" color="blue" />
-        <StatCard title="My Tasks" value="24" color="green" />
-        <StatCard title="Completed Tasks" value="17" color="purple" />
-        <StatCard title="Pending Tasks" value="7" color="orange" />
-      </div>
+
+      {stats && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <StatCard title="Total Tasks" value={stats.totalTasks} color="blue" onClick={() => navigate('/employee/tasks')} />
+          <StatCard title="Completed" value={stats.completedTasks} color="green" onClick={() => navigate('/employee/tasks')} />
+          <StatCard title="In Progress" value={stats.inProgressTasks} color="purple" onClick={() => navigate('/employee/tasks')} />
+          <StatCard title="Pending" value={stats.pendingTasks} color="orange" onClick={() => navigate('/employee/tasks')} />
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Section title="Recent Projects">
+        <Section title="Recent Tasks">
+          <ul className="divide-y divide-slate-100">
+            {recentTasks.map((task) => (
+              <li key={task.id} className="flex items-center justify-between py-2.5">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-sm text-slate-700 truncate">{task.title}</span>
+                </div>
+                <StatusBadge status={task.status} />
+              </li>
+            ))}
+          </ul>
+          {recentTasks.length === 0 && <p className="text-sm text-slate-500 text-center py-4">No tasks yet</p>}
+        </Section>
+
+        <Section title="My Projects">
           <div className="space-y-3">
-            {[
-              { name: 'Website Redesign', progress: 75 },
-              { name: 'API Integration', progress: 40 },
-              { name: 'Mobile App Update', progress: 90 },
-            ].map((project, i) => (
-              <div key={i}>
+            {recentProjects.map((project) => (
+              <div key={project.id}>
                 <div className="flex items-center justify-between text-sm mb-1">
                   <span className="font-medium text-slate-700">{project.name}</span>
                   <span className="text-slate-500">{project.progress}%</span>
@@ -66,41 +109,30 @@ export default function EmployeeDashboard() {
               </div>
             ))}
           </div>
-        </Section>
-        <Section title="My Tasks">
-          <ul className="divide-y divide-slate-100">
-            {[
-              { task: 'Complete login module', status: 'In Progress' },
-              { task: 'Fix navigation bug', status: 'Pending' },
-              { task: 'Write unit tests', status: 'Completed' },
-              { task: 'Review PR #24', status: 'Pending' },
-            ].map((item, i) => (
-              <li key={i} className="flex items-center justify-between py-2.5">
-                <span className="text-sm text-slate-700">{item.task}</span>
-                <span className={`text-xs px-2 py-0.5 rounded-full ${
-                  item.status === 'Completed' ? 'bg-green-100 text-green-700' :
-                  item.status === 'In Progress' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'
-                }`}>{item.status}</span>
-              </li>
-            ))}
-          </ul>
+          {recentProjects.length === 0 && <p className="text-sm text-slate-500 text-center py-4">No projects yet</p>}
         </Section>
       </div>
+
       <div className="mt-6">
-        <Section title="Notifications">
+        <Section title="Recent Notifications">
           <div className="space-y-3">
-            {[
-              { text: 'Project milestone due tomorrow', type: 'deadline' },
-              { text: 'New message from Manager', type: 'message' },
-              { text: 'Task assigned: Code Review', type: 'task' },
-            ].map((notif, i) => (
-              <div key={i} className="flex items-start gap-3 p-2 rounded-lg hover:bg-slate-50">
+            {notifications.map((notif) => (
+              <div key={notif.id} className={`flex items-start gap-3 p-2 rounded-lg ${notif.read ? 'bg-slate-50' : 'bg-blue-50'}`}>
                 <span className="text-lg" aria-hidden="true">
-                  {notif.type === 'deadline' ? '⏰' : notif.type === 'message' ? '💬' : '📋'}
+                  {notif.type === 'project' ? '🚀' : notif.type === 'message' ? '💬' : notif.type === 'task' ? '📋' : notif.type === 'leave' ? '🏖️' : '🔔'}
                 </span>
-                <span className="text-sm text-slate-700">{notif.text}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-slate-900">{notif.title}</p>
+                  <p className="text-xs text-slate-500 truncate">{notif.message}</p>
+                </div>
               </div>
             ))}
+          </div>
+          {notifications.length === 0 && <p className="text-sm text-slate-500 text-center py-4">No notifications</p>}
+          <div className="mt-3 text-center">
+            <button onClick={() => navigate('/employee/notifications')} className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+              View all notifications
+            </button>
           </div>
         </Section>
       </div>
