@@ -20,7 +20,18 @@ const AdminReports = React.lazy(() => import('../pages/admin/AdminReports'));
 const AdminAnalytics = React.lazy(() => import('../pages/admin/AdminAnalytics'));
 const AdminSettings = React.lazy(() => import('../pages/admin/AdminSettings'));
 const AdminAuditLogs = React.lazy(() => import('../pages/admin/AdminAuditLogs'));
+
 const EmployeeDashboard = React.lazy(() => import('../pages/employee/EmployeeDashboard'));
+const EmployeeProjects = React.lazy(() => import('../pages/employee/EmployeeProjects'));
+const EmployeeProjectDetails = React.lazy(() => import('../pages/employee/EmployeeProjectDetails'));
+const EmployeeTaskBoard = React.lazy(() => import('../pages/employee/EmployeeTaskBoard'));
+const EmployeeTasks = React.lazy(() => import('../pages/employee/EmployeeTasks'));
+const EmployeeTaskDetails = React.lazy(() => import('../pages/employee/EmployeeTaskDetails'));
+const EmployeeAttendance = React.lazy(() => import('../pages/employee/EmployeeAttendance'));
+const EmployeeLeave = React.lazy(() => import('../pages/employee/EmployeeLeave'));
+const EmployeeNotifications = React.lazy(() => import('../pages/employee/EmployeeNotifications'));
+const EmployeeProfile = React.lazy(() => import('../pages/employee/EmployeeProfile'));
+
 const ManagerDashboard = React.lazy(() => import('../pages/manager/ManagerDashboard'));
 const ClientDashboard = React.lazy(() => import('../pages/client/ClientDashboard'));
 
@@ -63,14 +74,17 @@ export default function AppRoutes() {
         <Route path={ROUTES.ADMIN_AUDIT_LOGS} element={<LazyWrapper><AdminAuditLogs /></LazyWrapper>} />
         <Route path="/admin/*" element={<LazyWrapper><AdminDashboard /></LazyWrapper>} />
       </Route>
+
       <Route element={<ProtectedRoute allowedRoles={[ROLES.EMPLOYEE]} />}>
         <Route path={ROUTES.EMPLOYEE_DASHBOARD} element={<LazyWrapper><EmployeeDashboard /></LazyWrapper>} />
         <Route path="/employee/*" element={<LazyWrapper><EmployeeDashboard /></LazyWrapper>} />
       </Route>
+
       <Route element={<ProtectedRoute allowedRoles={[ROLES.MANAGER]} />}>
         <Route path={ROUTES.MANAGER_DASHBOARD} element={<LazyWrapper><ManagerDashboard /></LazyWrapper>} />
         <Route path="/manager/*" element={<LazyWrapper><ManagerDashboard /></LazyWrapper>} />
       </Route>
+
       <Route element={<ProtectedRoute allowedRoles={[ROLES.CLIENT]} />}>
         <Route path={ROUTES.CLIENT_DASHBOARD} element={<LazyWrapper><ClientDashboard /></LazyWrapper>} />
         <Route path="/client/*" element={<LazyWrapper><ClientDashboard /></LazyWrapper>} />
