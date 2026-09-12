@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../../layouts/DashboardLayout';
+import StatCard from '../../components/employee/StatCard';
+import Section from '../../components/employee/Section';
+import StatusBadge from '../../components/employee/StatusBadge';
+import employeeService from '../../services/employeeService';
+import { ROUTES } from '../../types/constants';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import ErrorMessage from '../../components/ErrorMessage';
+import { DashboardStats, Task, Project, Notification } from '../../types/employee';
 
 const navItems = [
-  { path: '/employee/dashboard', label: 'Dashboard', icon: '📊' },
+  { path: ROUTES.EMPLOYEE_DASHBOARD, label: 'Dashboard', icon: '📊' },
   { path: '/employee/projects', label: 'My Projects', icon: '🚀' },
   { path: '/employee/tasks', label: 'My Tasks', icon: '✅' },
-  { path: '/employee/team', label: 'Team', icon: '👥' },
-  { path: '/employee/messages', label: 'Messages', icon: '💬' },
+  { path: '/employee/tasks/board', label: 'Task Board', icon: '📋' },
+  { path: '/employee/attendance', label: 'Attendance', icon: '📅' },
+  { path: '/employee/leave', label: 'Leave', icon: '🏖️' },
   { path: '/employee/notifications', label: 'Notifications', icon: '🔔' },
   { path: '/employee/profile', label: 'Profile', icon: '👤' },
 ];
