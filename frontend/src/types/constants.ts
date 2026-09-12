@@ -63,6 +63,16 @@ export const ROUTES = {
   EMPLOYEE_LEAVE: '/employee/leave',
   EMPLOYEE_NOTIFICATIONS: '/employee/notifications',
   EMPLOYEE_PROFILE: '/employee/profile',
+  MANAGER_TEAM: '/manager/team',
+  MANAGER_TEAM_MEMBER: '/manager/team/:id',
+  MANAGER_PROJECTS: '/manager/projects',
+  MANAGER_PROJECTS_CREATE: '/manager/projects/create',
+  MANAGER_PROJECT_DETAILS: '/manager/projects/:id',
+  MANAGER_TASKS: '/manager/tasks',
+  MANAGER_TASK_DETAILS: '/manager/tasks/:id',
+  MANAGER_APPROVALS: '/manager/approvals',
+  MANAGER_REPORTS: '/manager/reports',
+  MANAGER_ANALYTICS: '/manager/analytics',
 } as const;
 
 export const ROLE_LOGIN_ROUTES: Record<Role, string> = {
