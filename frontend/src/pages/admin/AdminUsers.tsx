@@ -27,8 +27,20 @@ export default function AdminUsers() {
     setLoading(true);
     setError('');
     try {
-      const res = await adminService.getUsers({ page, limit: 10, search, role: roleFilter || undefined, status: statusFilter || undefined });
-      setData(res);
+      // MOCK DATA
+      setData({
+        data: [
+          { id: '1', name: 'John Admin', email: 'admin@foundryone.com', role: 'admin', status: 'active', createdAt: '2025-01-01', phone: '+1234567890' },
+          { id: '2', name: 'Sarah Manager', email: 'sarah@foundryone.com', role: 'manager', status: 'active', createdAt: '2025-02-15', phone: '+1987654321', organization: 'Internal' },
+          { id: '3', name: 'Alex Developer', email: 'alex@foundryone.com', role: 'employee', status: 'active', createdAt: '2025-03-10', phone: '+1122334455', organization: 'Internal' },
+          { id: '4', name: 'Client User', email: 'client@foundryone.com', role: 'client', status: 'active', createdAt: '2025-04-20', phone: '+1555666777', organization: 'Acme Corp' },
+          { id: '5', name: 'Inactive Employee', email: 'inactive@foundryone.com', role: 'employee', status: 'inactive', createdAt: '2025-01-10', phone: '+1999888777' },
+        ],
+        total: 142,
+        page: 1,
+        limit: 10,
+        totalPages: 15
+      });
     } catch (e) {
       setError('Failed to load users');
     } finally {

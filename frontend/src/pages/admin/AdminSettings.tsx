@@ -18,8 +18,30 @@ export default function AdminSettings() {
   useEffect(() => {
     (async () => {
       try {
-        const data = await adminService.getSettings();
-        setSettings(data);
+        const mockData: AdminSettings = {
+          general: {
+            appName: 'FoundryOne Enterprise',
+            supportEmail: 'support@foundryone.com',
+            tagline: 'Build. Manage. Deliver.'
+          },
+          security: {
+            mfaEnabled: true,
+            passwordPolicy: 'strong',
+            sessionTimeout: 30
+          },
+          roles: {
+            admin: ['all'],
+            employee: ['read', 'write'],
+            manager: ['read', 'write', 'approve'],
+            client: ['read']
+          },
+          notifications: {
+            emailAlerts: true,
+            pushNotifications: true,
+            weeklyDigest: false
+          }
+        };
+        setSettings(mockData);
       } catch (e) {
         setError('Failed to load settings');
       } finally {
