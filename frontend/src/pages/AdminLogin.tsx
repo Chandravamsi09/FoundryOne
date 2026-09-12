@@ -22,7 +22,7 @@ export default function AdminLogin() {
       const target = from || ROUTES.ADMIN_DASHBOARD;
       navigate(target, { replace: true });
     } catch (err: any) {
-      setError(err.message || 'Login failed. Please try again.');
+      setError(err.response?.data?.detail || err.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }

@@ -25,11 +25,11 @@ export default function ProtectedRoute({ allowedRoles = [], requireAuth = true }
   }
 
   if (requireAuth && !isAuthenticated) {
-    return <Navigate to="/login/admin" state={{ from: location }} replace />;
+    return <Navigate to="/role-selection" state={{ from: location }} replace />;
   }
 
   if (requireAuth && allowedRoles.length > 0 && !allowedRoles.includes(role as Role)) {
-    return <Navigate to="/login/admin" replace />;
+    return <Navigate to="/role-selection" replace />;
   }
 
   return <Outlet />;

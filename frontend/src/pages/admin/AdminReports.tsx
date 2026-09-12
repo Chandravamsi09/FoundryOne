@@ -18,8 +18,25 @@ export default function AdminReports() {
     setLoading(true);
     setError('');
     try {
-      const res = await adminService.getReports({ type: reportType, dateFrom: dateFrom || new Date(Date.now() - 30 * 86400000).toISOString(), dateTo: dateTo || new Date().toISOString() });
-      setReports(res);
+      const mockReports = {
+        users: [
+          { id: 1, title: 'Weekly User Growth', value: '+15%', trend: 'up', description: 'New users registered this week' },
+          { id: 2, title: 'Active Sessions', value: '1,245', trend: 'up', description: 'Average daily active users' }
+        ],
+        projects: [
+          { id: 1, title: 'Projects Completed', value: '24', trend: 'up', description: 'Projects finished this month' },
+          { id: 2, title: 'Delayed Projects', value: '3', trend: 'down', description: 'Projects behind schedule' }
+        ],
+        organizations: [
+          { id: 1, title: 'New Organizations', value: '4', trend: 'up', description: 'Orgs onboarded this month' }
+        ],
+        activity: [
+          { id: 1, title: 'Total API Calls', value: '45K', trend: 'up', description: 'System API requests' },
+          { id: 2, title: 'Error Rate', value: '0.01%', trend: 'down', description: 'Overall system error rate' }
+        ]
+      };
+      
+      setReports((mockReports as any)[reportType] || []);
     } catch (e) {
       setError('Failed to load reports');
     } finally {

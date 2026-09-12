@@ -23,8 +23,14 @@ export default function AdminOrganizations() {
     setLoading(true);
     setError('');
     try {
-      const orgs = await adminService.getOrganizations();
-      let filtered = orgs;
+      const mockOrgs: AdminOrganization[] = [
+        { id: '1', name: 'Acme Corp', industry: 'Technology', size: '51-200', status: 'active', createdAt: '2024-10-12', clientCount: 4, projectCount: 2 },
+        { id: '2', name: 'Globex Inc', industry: 'Finance', size: '11-50', status: 'active', createdAt: '2024-11-05', clientCount: 2, projectCount: 1 },
+        { id: '3', name: 'Initech', industry: 'Software', size: '201-500', status: 'active', createdAt: '2025-01-20', clientCount: 15, projectCount: 8 },
+        { id: '4', name: 'Umbrella Corp', industry: 'Healthcare', size: '500+', status: 'inactive', createdAt: '2023-08-14', clientCount: 0, projectCount: 0 },
+      ];
+      
+      let filtered = mockOrgs;
       if (search) {
         const q = search.toLowerCase();
         filtered = filtered.filter((o) => o.name.toLowerCase().includes(q) || o.industry.toLowerCase().includes(q));

@@ -23,8 +23,19 @@ export default function AdminProjects() {
     setLoading(true);
     setError('');
     try {
-      const res = await adminService.getProjects({ status: statusFilter || undefined, search });
-      setProjects(res);
+      const mockProjects: AdminProject[] = [
+        { id: '1', name: 'Website Redesign', description: 'Overhaul corporate site', status: 'in_progress', progress: 65, owner: 'Sarah Manager', team: ['Alex Dev', 'John'], deadline: '2025-06-01', createdAt: '2025-01-01' },
+        { id: '2', name: 'Mobile App V2', description: 'React Native migration', status: 'planning', progress: 10, owner: 'Mike Tech', team: ['Sarah Manager'], deadline: '2025-09-15', createdAt: '2025-02-10' },
+        { id: '3', name: 'Cloud Migration', description: 'Migrate to AWS', status: 'completed', progress: 100, owner: 'Alex Dev', team: ['Mike Tech', 'John'], deadline: '2025-03-01', createdAt: '2024-11-20' },
+      ];
+      let filtered = mockProjects;
+      if (search) {
+        filtered = filtered.filter(p => p.name.toLowerCase().includes(search.toLowerCase()));
+      }
+      if (statusFilter) {
+        filtered = filtered.filter(p => p.status === statusFilter);
+      }
+      setProjects(filtered);
     } catch (e) {
       setError('Failed to load projects');
     } finally {

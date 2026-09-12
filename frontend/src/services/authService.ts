@@ -1,8 +1,5 @@
-import { ROLES, DEMO_ACCOUNTS, TOKEN_KEY, USER_KEY, ROLE_KEY, AUTH_STORAGE_KEY } from '../types/constants';
-
-const registeredUsers = new Map<string, any>();
-
-const delay = (ms = 600) => new Promise((resolve) => setTimeout(resolve, ms));
+import api from './api';
+import { TOKEN_KEY, USER_KEY, ROLE_KEY, AUTH_STORAGE_KEY } from '../types/constants';
 
 const persistAuth = (token: string, user: any, role: string) => {
   const data = { token, user, role };
@@ -18,18 +15,6 @@ const clearAuth = () => {
   localStorage.removeItem(USER_KEY);
   localStorage.removeItem(ROLE_KEY);
 };
-
-const normalizeRole = (role: string) => (role || '').toLowerCase();
-
-const findRegisteredUser = (email: string) => registeredUsers.get(email.toLowerCase());
-
-const buildUserPayload = (role: string, email: string) => ({
-  id: `usr_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
-  email,
-  role,
-  name: email.split('@')[0],
-  createdAt: new Date().toISOString(),
-});
 
 export interface LoginCredentials {
   email: string;
@@ -54,96 +39,44 @@ export interface AuthResult {
 }
 
 const authService = {
-  async login({ email, password, role }: LoginCredentials): Promise<AuthResult> {
-    await delay();
-    const selectedRole = normalizeRole(role);
-    const normalizedEmail = (email || '').toLowerCase();
-
-    const demo = DEMO_ACCOUNTS[selectedRole as keyof typeof DEMO_ACCOUNTS];
-    if (demo && demo.email === normalizedEmail && demo.password === password) {
-      const user = buildUserPayload(selectedRole, normalizedEmail);
-      const token = `mock_token_${selectedRole}_${Date.now()}`;
-      persistAuth(token, user, selectedRole);
-      return { token, user, role: selectedRole };
-    }
-
-    const registered = findRegisteredUser(normalizedEmail);
-    if (registered && registered.password === password && normalizeRole(registered.role) === selectedRole) {
-      const user = {
-        id: registered.id,
-        email: registered.email,
-        role: registered.role,
-        name: registered.name,
-        phone: registered.phone,
-        createdAt: registered.createdAt,
-      };
-      const token = `mock_token_${selectedRole}_${Date.now()}`;
-      persistAuth(token, user, selectedRole);
-      return { token, user, role: selectedRole };
-    }
-
-    throw new Error('Invalid credentials for the selected role.');
+  async login(credentials: LoginCredentials): Promise<AuthResult> {
+    const response = await api.post('/auth/login', credentials);
+    const { access_token, user, role } = response.data;
+    persistAuth(access_token, user, role);
+    return { token: access_token, user, role };
   },
 
   async register(data: RegisterData): Promise<{ user: any; role: string }> {
-    await delay();
-    const selectedRole = normalizeRole(data.role);
-    const normalizedEmail = (data.email || '').toLowerCase();
-
-    if (selectedRole === ROLES.ADMIN) {
-      throw new Error('Admin accounts cannot be created through public registration.');
-    }
-    if (![ROLES.EMPLOYEE, ROLES.MANAGER, ROLES.CLIENT].includes(selectedRole as any)) {
-      throw new Error('Invalid role selected.');
-    }
-    if (data.password !== data.confirmPassword) {
-      throw new Error('Passwords do not match.');
-    }
-    if (findRegisteredUser(normalizedEmail)) {
-      throw new Error('An account with this email already exists.');
-    }
-
-    const user = {
-      id: `usr_${Date.now()}`,
-      name: data.name,
-      email: normalizedEmail,
-      phone: data.phone,
-      role: selectedRole,
-      createdAt: new Date().toISOString(),
-    };
-    registeredUsers.set(normalizedEmail, { ...user, password: data.password });
-    return { user, role: selectedRole };
+    const response = await api.post('/auth/register', data);
+    return response.data;
   },
 
   async logout(): Promise<boolean> {
-    await delay(200);
+    // Optionally call a backend endpoint to invalidate the token
     clearAuth();
     return true;
   },
 
   async checkAuth(): Promise<AuthResult | null> {
     const token = localStorage.getItem(TOKEN_KEY);
-    const userRaw = localStorage.getItem(USER_KEY);
-    const role = localStorage.getItem(ROLE_KEY);
-    if (!token || !userRaw || !role) return null;
+    if (!token) return null;
+    
     try {
-      const user = JSON.parse(userRaw);
-      return { token, user, role: normalizeRole(role) };
-    } catch {
+      const response = await api.get('/auth/me');
+      const user = response.data;
+      const role = user.role;
+      // Re-persist in case it changed
+      persistAuth(token, user, role);
+      return { token, user, role };
+    } catch (error) {
+      clearAuth();
       return null;
     }
   },
 
   async changePassword({ email, currentPassword, newPassword }: { email: string; currentPassword: string; newPassword: string }) {
-    await delay();
-    const demo = Object.values(DEMO_ACCOUNTS).find((d) => d.email === email.toLowerCase());
-    if (demo && demo.password === currentPassword) return { success: true };
-    const registered = findRegisteredUser(email.toLowerCase());
-    if (registered && registered.password === currentPassword) {
-      registered.password = newPassword;
-      return { success: true };
-    }
-    throw new Error('Current password is incorrect.');
+    const response = await api.post('/auth/change-password', { email, currentPassword, newPassword });
+    return response.data;
   },
 };
 
