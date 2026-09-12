@@ -1,10 +1,11 @@
-import asyncio
+﻿import asyncio
 import uuid
 from datetime import datetime, timedelta
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
-from passlib.context import CryptContext
 
 from app.core.config import settings
+from app.core.security import get_password_hash
+from app.core.database import Base
 from app.models.organization import Organization
 from app.models.user import User
 from app.models.project import Project
@@ -12,11 +13,15 @@ from app.models.task import Task
 from app.models.billing import Contract, Invoice, Payment
 from app.models.support import SupportTicket, AuditLog
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 async def seed_db():
     print("Connecting to database...")
-    engine = create_async_engine(settings.DATABASE_URL, echo=False)
+    engine_kwargs = {"echo": False}
+    engine = create_async_engine(settings.DATABASE_URL, **engine_kwargs)
+    
+    # Create all tables first if sqlite/local
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+        
     async_session = async_sessionmaker(engine, expire_on_commit=False)
     
     async with async_session() as session:
@@ -32,56 +37,33 @@ async def seed_db():
         await session.refresh(org3)
 
         print("Creating Users...")
-        admin = User(email="admin@foundryone.com", name="Admin User", role="admin", hashed_password=pwd_context.hash("password123"), organization_id=org1.id)
-        manager1 = User(email="manager@acme.com", name="Bob Smith", role="manager", hashed_password=pwd_context.hash("password123"), organization_id=org2.id)
-        employee1 = User(email="employee@acme.com", name="Alice Johnson", role="employee", hashed_password=pwd_context.hash("password123"), organization_id=org2.id)
-        client1 = User(email="client@globex.com", name="Charlie Davis", role="client", hashed_password=pwd_context.hash("password123"), organization_id=org3.id)
+        admin = User(email="admin@foundryone.com", name="Admin User", role="admin", hashed_password=get_password_hash("Admin@123"), organization_id=org1.id)
+        manager1 = User(email="manager@foundryone.com", name="Manager User", role="manager", hashed_password=get_password_hash("Manager@123"), organization_id=org2.id)
+        employee1 = User(email="employee@foundryone.com", name="Employee User", role="employee", hashed_password=get_password_hash("Employee@123"), organization_id=org2.id)
+        client1 = User(email="client@foundryone.com", name="Client User", role="client", hashed_password=get_password_hash("Client@123"), organization_id=org3.id)
         
-        # Add 50 more employees to increase data volume
-        bulk_users = []
-        for i in range(50):
-            bulk_users.append(
-                User(email=f"employee{i}@acme.com", name=f"Bulk Employee {i}", role="employee", hashed_password=pwd_context.hash("password123"), organization_id=org2.id)
-            )
-
-        session.add_all([admin, manager1, employee1, client1] + bulk_users)
+        session.add_all([admin, manager1, employee1, client1])
         await session.commit()
         await session.refresh(manager1)
         await session.refresh(client1)
 
         print("Creating Projects and Tasks...")
-        p1 = Project(name="Website Redesign", description="Revamp company website", status="active", progress=65.0, organization_id=org2.id, manager_id=manager1.id, client_id=client1.id)
-        p2 = Project(name="Mobile App", description="iOS and Android app", status="active", progress=40.0, organization_id=org2.id, manager_id=manager1.id, client_id=client1.id)
+        p1 = Project(name="FoundryOne Enterprise Portal", description="Core web portal redesign with unified dashboard", status="active", progress=72.0, organization_id=org2.id, manager_id=manager1.id, client_id=client1.id)
+        p2 = Project(name="Cloud Infrastructure Modernization", description="Migrating services to scalable microservices", status="active", progress=58.0, organization_id=org2.id, manager_id=manager1.id, client_id=client1.id)
         
         session.add_all([p1, p2])
         await session.commit()
         await session.refresh(p1)
         
-        # Add 100 tasks
-        tasks = []
-        for i in range(100):
-            tasks.append(Task(title=f"Development Task {i}", description="Detailed task requirements...", status="TODO", project_id=p1.id))
+        tasks = [
+            Task(title="Finalize Manager Dashboard Metrics", description="Ensure accurate computation of metrics", status="IN_PROGRESS", priority="HIGH", project_id=p1.id),
+            Task(title="Implement Connection Pooling", description="Tune engine connection limits", status="TODO", priority="CRITICAL", project_id=p1.id),
+            Task(title="QA Testing on Project Detail Form", description="Verify field validation and constraints", status="IN_PROGRESS", priority="MEDIUM", project_id=p1.id),
+        ]
             
         session.add_all(tasks)
         await session.commit()
 
-        print("Creating Contracts and Invoices...")
-        c1 = Contract(title="Annual Service Agreement", status="ACTIVE", value=50000.0, client_id=client1.id, project_id=p1.id)
-        session.add(c1)
-        await session.commit()
-        await session.refresh(c1)
-        
-        inv1 = Invoice(invoice_number="INV-2026-001", status="PAID", subtotal=5000.0, tax=500.0, total=5500.0, due_date=datetime.now() + timedelta(days=30), client_id=client1.id, contract_id=c1.id)
-        session.add(inv1)
-        await session.commit()
-        
-        print("Creating Audit Logs...")
-        logs = []
-        for i in range(500):
-            logs.append(AuditLog(actor_id=admin.id, action=f"ACTION_{i}", entity="System", details="Routine operation"))
-        session.add_all(logs)
-        await session.commit()
-        
         print("Database seeding completed successfully!")
 
 if __name__ == "__main__":
