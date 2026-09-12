@@ -33,6 +33,15 @@ const EmployeeNotifications = React.lazy(() => import('../pages/employee/Employe
 const EmployeeProfile = React.lazy(() => import('../pages/employee/EmployeeProfile'));
 
 const ManagerDashboard = React.lazy(() => import('../pages/manager/ManagerDashboard'));
+const ManagerTeam = React.lazy(() => import('../pages/manager/Team'));
+const ManagerTeamMember = React.lazy(() => import('../pages/manager/TeamMemberDetail'));
+const ManagerProjects = React.lazy(() => import('../pages/manager/Projects'));
+const ManagerCreateProject = React.lazy(() => import('../pages/manager/CreateProject'));
+const ManagerProjectDetail = React.lazy(() => import('../pages/manager/ProjectDetail'));
+const ManagerTasks = React.lazy(() => import('../pages/manager/Tasks'));
+const ManagerApprovals = React.lazy(() => import('../pages/manager/Approvals'));
+const ManagerReports = React.lazy(() => import('../pages/manager/Reports'));
+const ManagerAnalytics = React.lazy(() => import('../pages/manager/Analytics'));
 const ClientDashboard = React.lazy(() => import('../pages/client/ClientDashboard'));
 
 const LazyWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -82,6 +91,15 @@ export default function AppRoutes() {
 
       <Route element={<ProtectedRoute allowedRoles={[ROLES.MANAGER]} />}>
         <Route path={ROUTES.MANAGER_DASHBOARD} element={<LazyWrapper><ManagerDashboard /></LazyWrapper>} />
+        <Route path={ROUTES.MANAGER_TEAM} element={<LazyWrapper><ManagerTeam /></LazyWrapper>} />
+        <Route path={ROUTES.MANAGER_TEAM_MEMBER} element={<LazyWrapper><ManagerTeamMember /></LazyWrapper>} />
+        <Route path={ROUTES.MANAGER_PROJECTS} element={<LazyWrapper><ManagerProjects /></LazyWrapper>} />
+        <Route path={ROUTES.MANAGER_PROJECTS_CREATE} element={<LazyWrapper><ManagerCreateProject /></LazyWrapper>} />
+        <Route path={ROUTES.MANAGER_PROJECT_DETAILS} element={<LazyWrapper><ManagerProjectDetail /></LazyWrapper>} />
+        <Route path={ROUTES.MANAGER_TASKS} element={<LazyWrapper><ManagerTasks /></LazyWrapper>} />
+        <Route path={ROUTES.MANAGER_APPROVALS} element={<LazyWrapper><ManagerApprovals /></LazyWrapper>} />
+        <Route path={ROUTES.MANAGER_REPORTS} element={<LazyWrapper><ManagerReports /></LazyWrapper>} />
+        <Route path={ROUTES.MANAGER_ANALYTICS} element={<LazyWrapper><ManagerAnalytics /></LazyWrapper>} />
         <Route path="/manager/*" element={<LazyWrapper><ManagerDashboard /></LazyWrapper>} />
       </Route>
 
