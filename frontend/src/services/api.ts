@@ -1,4 +1,4 @@
-import axios from 'axios';
+﻿import axios from 'axios';
 import { TOKEN_KEY } from '../types/constants';
 
 const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
@@ -8,6 +8,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 5000,
 });
 
 api.interceptors.request.use((config) => {
@@ -21,13 +22,6 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Only handle 401s if it's not the login endpoint itself
-    const isLoginEndpoint = error.config && error.config.url && error.config.url.includes('/login');
-    if (error.response && error.response.status === 401 && !isLoginEndpoint) {
-      // Handle unauthorized (e.g., token expired)
-      localStorage.removeItem(TOKEN_KEY);
-      window.location.href = '/role-selection';
-    }
     return Promise.reject(error);
   }
 );
