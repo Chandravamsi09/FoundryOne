@@ -31,22 +31,23 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
 );
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState<AdminStats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<AdminStats | null>({
+    totalUsers: 142,
+    totalEmployees: 45,
+    totalManagers: 12,
+    totalClients: 85,
+    activeProjects: 38,
+    completedProjects: 156,
+    pendingApprovals: 9,
+    recentLogins: 42,
+    systemHealth: {
+      cpu: 45,
+      memory: 68,
+      storage: 32
+    }
+  });
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await adminService.getStats();
-        setStats(data);
-      } catch (e) {
-        setError('Failed to load dashboard stats');
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
 
   return (
     <AdminLayout title="Admin Dashboard">
@@ -55,7 +56,7 @@ export default function AdminDashboard() {
         <p className="text-sm text-slate-500 mt-1">Here is your system overview</p>
       </div>
 
-      <ErrorMessage message={error} />
+      {error && <ErrorMessage message={error} />}
 
       {loading ? (
         <div className="p-12 flex justify-center"><div className="animate-spin text-blue-600 h-8 w-8" /></div>

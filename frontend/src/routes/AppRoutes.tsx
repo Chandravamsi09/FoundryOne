@@ -61,15 +61,19 @@ export default function AppRoutes() {
         <Route path={ROUTES.ADMIN_ANALYTICS} element={<LazyWrapper><AdminAnalytics /></LazyWrapper>} />
         <Route path={ROUTES.ADMIN_SETTINGS} element={<LazyWrapper><AdminSettings /></LazyWrapper>} />
         <Route path={ROUTES.ADMIN_AUDIT_LOGS} element={<LazyWrapper><AdminAuditLogs /></LazyWrapper>} />
+        <Route path="/admin/*" element={<LazyWrapper><AdminDashboard /></LazyWrapper>} />
       </Route>
       <Route element={<ProtectedRoute allowedRoles={[ROLES.EMPLOYEE]} />}>
         <Route path={ROUTES.EMPLOYEE_DASHBOARD} element={<LazyWrapper><EmployeeDashboard /></LazyWrapper>} />
+        <Route path="/employee/*" element={<LazyWrapper><EmployeeDashboard /></LazyWrapper>} />
       </Route>
       <Route element={<ProtectedRoute allowedRoles={[ROLES.MANAGER]} />}>
         <Route path={ROUTES.MANAGER_DASHBOARD} element={<LazyWrapper><ManagerDashboard /></LazyWrapper>} />
+        <Route path="/manager/*" element={<LazyWrapper><ManagerDashboard /></LazyWrapper>} />
       </Route>
       <Route element={<ProtectedRoute allowedRoles={[ROLES.CLIENT]} />}>
         <Route path={ROUTES.CLIENT_DASHBOARD} element={<LazyWrapper><ClientDashboard /></LazyWrapper>} />
+        <Route path="/client/*" element={<LazyWrapper><ClientDashboard /></LazyWrapper>} />
       </Route>
 
       <Route path="*" element={<Navigate to={ROUTES.LANDING} replace />} />

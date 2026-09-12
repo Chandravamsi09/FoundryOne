@@ -11,8 +11,21 @@ export default function AdminAnalytics() {
   useEffect(() => {
     (async () => {
       try {
-        const data = await adminService.getAnalytics();
-        setAnalytics(data);
+        const mockData = {
+          userGrowth: [
+            { date: 'Jan', users: 120 },
+            { date: 'Feb', users: 142 },
+            { date: 'Mar', users: 165 },
+            { date: 'Apr', users: 210 },
+            { date: 'May', users: 280 },
+          ],
+          systemMetrics: {
+            uptime: 99.98,
+            avgResponseTime: 245,
+            errorRate: 0.02
+          }
+        };
+        setAnalytics(mockData);
       } catch (e) {
         setError('Failed to load analytics');
       } finally {

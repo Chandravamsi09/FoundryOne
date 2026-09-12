@@ -16,9 +16,10 @@ export default function Register() {
   const defaultRole = location.state?.defaultRole || '';
 
   const roleRedirects: Record<string, string> = {
-    [ROLES.EMPLOYEE]: ROUTES.EMPLOYEE_DASHBOARD,
-    [ROLES.MANAGER]: ROUTES.MANAGER_DASHBOARD,
-    [ROLES.CLIENT]: ROUTES.CLIENT_DASHBOARD,
+    [ROLES.ADMIN]: ROUTES.ADMIN_LOGIN,
+    [ROLES.EMPLOYEE]: ROUTES.EMPLOYEE_LOGIN,
+    [ROLES.MANAGER]: ROUTES.MANAGER_LOGIN,
+    [ROLES.CLIENT]: ROUTES.CLIENT_LOGIN,
   };
 
   const handleRegister = async (data: any) => {
@@ -31,7 +32,7 @@ export default function Register() {
       const target = roleRedirects[data.role] || ROUTES.LANDING;
       setTimeout(() => navigate(target, { replace: true }), 1500);
     } catch (err: any) {
-      setError(err.message || 'Registration failed. Please try again.');
+      setError(err.response?.data?.detail || err.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }

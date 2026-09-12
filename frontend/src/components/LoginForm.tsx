@@ -23,6 +23,10 @@ export default function LoginForm({ role, roleIcon, roleTitle, roleDescription, 
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [submitError, setSubmitError] = useState(error);
 
+  React.useEffect(() => {
+    setSubmitError(error);
+  }, [error]);
+
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
     newErrors.email = validateEmail(email);

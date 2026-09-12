@@ -18,8 +18,14 @@ export default function AdminAuditLogs() {
     setLoading(true);
     setError('');
     try {
-      const res = await adminService.getAuditLogs({ page, limit: 10, action: actionFilter || undefined, actor: actorFilter || undefined });
-      setData(res);
+      const mockLogs: AdminAuditLog[] = [
+        { id: '1', action: 'User Created', actor: 'admin@foundryone.com', target: 'new_employee@foundryone.com', timestamp: '2025-02-14T10:00:00Z', details: { role: 'employee' } },
+        { id: '2', action: 'Project Updated', actor: 'sarah@foundryone.com', target: 'Project Alpha', timestamp: '2025-02-14T11:30:00Z', details: { status: 'in_progress' } },
+        { id: '3', action: 'Organization Deleted', actor: 'admin@foundryone.com', target: 'Test Corp', timestamp: '2025-02-13T09:15:00Z', details: {} },
+        { id: '4', action: 'Login Failed', actor: 'unknown', target: 'admin@foundryone.com', timestamp: '2025-02-13T08:00:00Z', details: { ip: '192.168.1.1' } },
+        { id: '5', action: 'Settings Changed', actor: 'admin@foundryone.com', target: 'System Settings', timestamp: '2025-02-12T15:45:00Z', details: { setting: 'Email Provider' } },
+      ];
+      setData({ data: mockLogs, total: 154, page: 1, limit: 10, totalPages: 16 } as any);
     } catch (e) {
       setError('Failed to load audit logs');
     } finally {

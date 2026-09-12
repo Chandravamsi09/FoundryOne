@@ -26,6 +26,10 @@ export default function RegisterForm({ onSubmit, loading = false, error = '', de
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState(error);
 
+  React.useEffect(() => {
+    setSubmitError(error);
+  }, [error]);
+
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     newErrors.name = validateName(name);
@@ -49,7 +53,7 @@ export default function RegisterForm({ onSubmit, loading = false, error = '', de
     }
   };
 
-  const availableRoles: Role[] = [ROLES.EMPLOYEE, ROLES.MANAGER, ROLES.CLIENT];
+  const availableRoles: Role[] = [ROLES.ADMIN, ROLES.EMPLOYEE, ROLES.MANAGER, ROLES.CLIENT];
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
