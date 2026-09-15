@@ -41,7 +41,7 @@ jobs:
         DATABASE_URL: postgresql+asyncpg://foundryone:password@localhost:5432/foundryone
         PYTHONPATH: .
       run: |
-        pytest tests/
+        python -m pytest tests/
 
   test-frontend:
     runs-on: ubuntu-latest
