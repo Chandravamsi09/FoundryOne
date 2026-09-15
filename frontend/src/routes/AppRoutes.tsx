@@ -86,6 +86,15 @@ export default function AppRoutes() {
 
       <Route element={<ProtectedRoute allowedRoles={[ROLES.EMPLOYEE]} />}>
         <Route path={ROUTES.EMPLOYEE_DASHBOARD} element={<LazyWrapper><EmployeeDashboard /></LazyWrapper>} />
+        <Route path={ROUTES.EMPLOYEE_PROJECTS} element={<LazyWrapper><EmployeeProjects /></LazyWrapper>} />
+        <Route path={ROUTES.EMPLOYEE_PROJECT_DETAILS} element={<LazyWrapper><EmployeeProjectDetails /></LazyWrapper>} />
+        <Route path="/employee/tasks/board" element={<LazyWrapper><EmployeeTaskBoard /></LazyWrapper>} />
+        <Route path={ROUTES.EMPLOYEE_TASKS} element={<LazyWrapper><EmployeeTasks /></LazyWrapper>} />
+        <Route path={ROUTES.EMPLOYEE_TASK_DETAILS} element={<LazyWrapper><EmployeeTaskDetails /></LazyWrapper>} />
+        <Route path={ROUTES.EMPLOYEE_ATTENDANCE} element={<LazyWrapper><EmployeeAttendance /></LazyWrapper>} />
+        <Route path={ROUTES.EMPLOYEE_LEAVE} element={<LazyWrapper><EmployeeLeave /></LazyWrapper>} />
+        <Route path={ROUTES.EMPLOYEE_NOTIFICATIONS} element={<LazyWrapper><EmployeeNotifications /></LazyWrapper>} />
+        <Route path={ROUTES.EMPLOYEE_PROFILE} element={<LazyWrapper><EmployeeProfile /></LazyWrapper>} />
         <Route path="/employee/*" element={<LazyWrapper><EmployeeDashboard /></LazyWrapper>} />
       </Route>
 
