@@ -5,3 +5,8 @@ build/
 .vscode/
 .idea/
 .DS_Store
+__pycache__/
+*.pyc
+backend/venv/
+venv/
+*.bat
