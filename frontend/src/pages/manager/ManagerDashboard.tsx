@@ -29,7 +29,9 @@ const StatCard = ({ title, value, color = 'blue' }: { title: string; value: stri
           <p className="text-sm font-medium text-slate-500">{title}</p>
           <p className="text-2xl font-bold text-slate-900 mt-1">{value}</p>
         </div>
-        <div className={`w-11 h-11 rounded-xl ${colors[color]} flex items-center justify-center text-xl`}>{emojis[color]}</div>
+        <div className={`w-11 h-11 rounded-xl ${colors[color] || colors.blue} flex items-center justify-center text-xl`}>
+          {emojis[color] || '📊'}
+        </div>
       </div>
     </div>
   );

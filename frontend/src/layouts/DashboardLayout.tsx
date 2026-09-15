@@ -6,7 +6,7 @@ import { APP_NAME, ROLE_LABELS, ROLE_LOGIN_ROUTES } from '../types/constants';
 interface NavItem {
   path: string;
   label: string;
-  icon?: string;
+  icon?: React.ReactNode;
 }
 
 interface DashboardLayoutProps {

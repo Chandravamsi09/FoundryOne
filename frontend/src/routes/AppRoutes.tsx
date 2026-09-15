@@ -33,6 +33,15 @@ const EmployeeNotifications = React.lazy(() => import('../pages/employee/Employe
 const EmployeeProfile = React.lazy(() => import('../pages/employee/EmployeeProfile'));
 
 const ManagerDashboard = React.lazy(() => import('../pages/manager/ManagerDashboard'));
+const ManagerTeam = React.lazy(() => import('../pages/manager/Team'));
+const ManagerTeamMember = React.lazy(() => import('../pages/manager/TeamMemberDetail'));
+const ManagerProjects = React.lazy(() => import('../pages/manager/Projects'));
+const ManagerCreateProject = React.lazy(() => import('../pages/manager/CreateProject'));
+const ManagerProjectDetail = React.lazy(() => import('../pages/manager/ProjectDetail'));
+const ManagerTasks = React.lazy(() => import('../pages/manager/Tasks'));
+const ManagerApprovals = React.lazy(() => import('../pages/manager/Approvals'));
+const ManagerReports = React.lazy(() => import('../pages/manager/Reports'));
+const ManagerAnalytics = React.lazy(() => import('../pages/manager/Analytics'));
 const ClientDashboard = React.lazy(() => import('../pages/client/ClientDashboard'));
 
 const LazyWrapper = ({ children }: { children: React.ReactNode }) => (

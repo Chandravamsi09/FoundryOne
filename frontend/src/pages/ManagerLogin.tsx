@@ -19,7 +19,9 @@ export default function ManagerLogin() {
     setError('');
     try {
       await login({ ...credentials, role: ROLES.MANAGER });
-      const target = from || ROUTES.MANAGER_DASHBOARD;
+      const target = (from && from !== '/role-selection' && from !== '/' && !from.includes('/login'))
+        ? from
+        : ROUTES.MANAGER_DASHBOARD;
       navigate(target, { replace: true });
     } catch (err: any) {
       setError(err.response?.data?.detail || err.message || 'Login failed. Please try again.');

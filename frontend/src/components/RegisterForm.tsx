@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   validateName, validateEmail, validatePhone,
@@ -7,7 +8,7 @@ import {
 import FormInput from './FormInput';
 import ErrorMessage from './ErrorMessage';
 import Button from './Button';
-import { Role, ROLES, ROLE_LABELS } from '../types/constants';
+import { Role, ROLES, ROLE_LABELS, ROLE_LOGIN_ROUTES, ROUTES } from '../types/constants';
 
 interface RegisterFormProps {
   onSubmit: (data: { name: string; email: string; phone: string; password: string; confirmPassword: string; role: Role }) => Promise<void>;
@@ -78,7 +79,7 @@ export default function RegisterForm({ onSubmit, loading = false, error = '', de
 
         <div className="flex flex-col gap-1.5">
           <label className="text-sm font-medium text-slate-700">Role <span className="text-red-500 ml-1">*</span></label>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {availableRoles.map((r) => (
               <button key={r} type="button" onClick={() => setRole(r)} disabled={loading}
                 className={`py-2.5 px-3 text-sm rounded-xl border-2 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
@@ -102,9 +103,12 @@ export default function RegisterForm({ onSubmit, loading = false, error = '', de
 
         <div className="text-center text-sm text-slate-500">
           Already have an account?{' '}
-          <a href="/login" className="text-blue-600 hover:text-blue-700 font-semibold">
+          <Link
+            to={role && ROLE_LOGIN_ROUTES[role as Role] ? ROLE_LOGIN_ROUTES[role as Role] : ROUTES.LANDING}
+            className="text-blue-600 hover:text-blue-700 font-semibold"
+          >
             Sign In
-          </a>
+          </Link>
         </div>
       </form>
     </motion.div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { validateEmail, validatePassword } from '../utils/validation';
 import FormInput from './FormInput';
@@ -136,9 +137,9 @@ export default function LoginForm({ role, roleIcon, roleTitle, roleDescription, 
 
         <div className="text-center text-sm text-slate-500 mt-2">
           Don't have an account?{' '}
-          <a href="/register" className="text-blue-600 hover:text-blue-700 font-semibold">
+          <Link to="/register" state={{ defaultRole: role }} className="text-blue-600 hover:text-blue-700 font-semibold">
             Create Account
-          </a>
+          </Link>
         </div>
       </form>
 

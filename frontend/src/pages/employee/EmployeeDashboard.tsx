@@ -21,7 +21,7 @@ const navItems = [
   { path: '/employee/profile', label: 'Profile', icon: '👤' },
 ];
 
-const StatCard = ({ title, value, color = 'blue' }: { title: string; value: string; color?: string }) => {
+const StatCard = ({ title, value, color = 'blue' }: { title: string; value: string | number; color?: string }) => {
   const colors: Record<string, string> = { blue: 'bg-blue-50 text-blue-600', green: 'bg-green-50 text-green-600', purple: 'bg-purple-50 text-purple-600', orange: 'bg-orange-50 text-orange-600' };
   const emojis: Record<string, string> = { blue: '🚀', green: '✅', purple: '⏳', orange: '📋' };
   return (
