@@ -39,8 +39,9 @@ jobs:
       working-directory: ./backend
       env:
         DATABASE_URL: postgresql+asyncpg://foundryone:password@localhost:5432/foundryone
+        PYTHONPATH: .
       run: |
-        pytest tests/
+        pytest tests/ -W ignore
 
   test-frontend:
     runs-on: ubuntu-latest
