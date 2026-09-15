@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import DashboardLayout from '../../layouts/DashboardLayout';
-import StatCard from '../../components/employee/StatCard';
-import Section from '../../components/employee/Section';
 import StatusBadge from '../../components/employee/StatusBadge';
 import employeeService from '../../services/employeeService';
 import { ROUTES } from '../../types/constants';
@@ -21,7 +19,7 @@ const navItems = [
   { path: '/employee/profile', label: 'Profile', icon: '👤' },
 ];
 
-const StatCard = ({ title, value, color = 'blue' }: { title: string; value: string; color?: string }) => {
+const StatCard = ({ title, value, color = 'blue' }: { title: string; value: string | number; color?: string }) => {
   const colors: Record<string, string> = { blue: 'bg-blue-50 text-blue-600', green: 'bg-green-50 text-green-600', purple: 'bg-purple-50 text-purple-600', orange: 'bg-orange-50 text-orange-600' };
   const emojis: Record<string, string> = { blue: '🚀', green: '✅', purple: '⏳', orange: '📋' };
   return (
@@ -43,8 +41,6 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
     {children}
   </div>
 );
-
-import { useLocation } from 'react-router-dom';
 
 const EmployeeProjectsView = () => (
   <div className="space-y-6">
@@ -292,6 +288,8 @@ export default function EmployeeDashboard() {
   const currentNav = navItems.find(item => item.path === path);
   
   const renderContent = () => {
+    if (path.includes('/leave')) return <Navigate to={ROUTES.EMPLOYEE_LEAVE} replace />;
+    if (path.includes('/attendance')) return <Navigate to={ROUTES.EMPLOYEE_ATTENDANCE} replace />;
     if (path.includes('/projects')) return <EmployeeProjectsView />;
     if (path.includes('/tasks')) return <EmployeeTasksView />;
     if (path.includes('/profile')) return <EmployeeProfileView />;

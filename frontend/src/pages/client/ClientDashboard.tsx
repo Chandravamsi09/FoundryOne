@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import DashboardLayout from '../../layouts/DashboardLayout';
 
 const navItems = [
@@ -32,8 +33,6 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
     {children}
   </div>
 );
-
-import { useLocation } from 'react-router-dom';
 
 const ProjectsView = () => (
   <div className="space-y-6">
