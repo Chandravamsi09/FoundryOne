@@ -31,12 +31,6 @@ export default function RegisterForm({ onSubmit, loading = false, error = '', de
     setSubmitError(error);
   }, [error]);
 
-  React.useEffect(() => {
-    if (defaultRole) {
-      setRole(defaultRole);
-    }
-  }, [defaultRole]);
-
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     newErrors.name = validateName(name);

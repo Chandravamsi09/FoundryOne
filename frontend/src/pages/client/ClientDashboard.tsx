@@ -34,6 +34,8 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
   </div>
 );
 
+import { useLocation } from 'react-router-dom';
+
 const ProjectsView = () => (
   <div className="space-y-6">
     <div className="flex justify-between items-center">

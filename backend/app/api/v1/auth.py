@@ -67,7 +67,6 @@ async def register(data: RegisterData, db: AsyncSession = Depends(get_db)):
         name=data.name,
         phone=data.phone,
         role=data.role,
-        status="active",
         hashed_password=get_password_hash(data.password)
     )
     

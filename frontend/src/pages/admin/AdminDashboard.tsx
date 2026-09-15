@@ -3,7 +3,6 @@ import { AdminStats } from '../../types/admin';
 import adminService from '../../services/adminService';
 import AdminLayout from '../../layouts/AdminLayout';
 import ErrorMessage from '../../components/ErrorMessage';
-import { Users, Briefcase, BarChart3, Handshake, Rocket } from 'lucide-react';
 
 const StatCard = ({ title, value, color = 'blue' }: { title: string; value: string | number; color?: string }) => {
   const colors: Record<string, string> = {

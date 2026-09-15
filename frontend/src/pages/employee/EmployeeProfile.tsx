@@ -12,7 +12,6 @@ const navItems = [
   { path: ROUTES.EMPLOYEE_DASHBOARD, label: 'Dashboard', icon: '📊' },
   { path: '/employee/projects', label: 'My Projects', icon: '🚀' },
   { path: '/employee/tasks', label: 'My Tasks', icon: '✅' },
-  { path: '/employee/tasks/board', label: 'Task Board', icon: '📋' },
   { path: '/employee/attendance', label: 'Attendance', icon: '📅' },
   { path: '/employee/leave', label: 'Leave', icon: '🏖️' },
   { path: '/employee/notifications', label: 'Notifications', icon: '🔔' },

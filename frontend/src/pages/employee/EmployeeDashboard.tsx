@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../../layouts/DashboardLayout';
+import StatCard from '../../components/employee/StatCard';
+import Section from '../../components/employee/Section';
 import StatusBadge from '../../components/employee/StatusBadge';
 import employeeService from '../../services/employeeService';
 import { ROUTES } from '../../types/constants';
@@ -41,6 +43,8 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
     {children}
   </div>
 );
+
+import { useLocation } from 'react-router-dom';
 
 const EmployeeProjectsView = () => (
   <div className="space-y-6">
@@ -288,8 +292,6 @@ export default function EmployeeDashboard() {
   const currentNav = navItems.find(item => item.path === path);
   
   const renderContent = () => {
-    if (path.includes('/leave')) return <Navigate to={ROUTES.EMPLOYEE_LEAVE} replace />;
-    if (path.includes('/attendance')) return <Navigate to={ROUTES.EMPLOYEE_ATTENDANCE} replace />;
     if (path.includes('/projects')) return <EmployeeProjectsView />;
     if (path.includes('/tasks')) return <EmployeeTasksView />;
     if (path.includes('/profile')) return <EmployeeProfileView />;
