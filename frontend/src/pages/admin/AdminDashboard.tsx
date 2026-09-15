@@ -3,13 +3,20 @@ import { AdminStats } from '../../types/admin';
 import adminService from '../../services/adminService';
 import AdminLayout from '../../layouts/AdminLayout';
 import ErrorMessage from '../../components/ErrorMessage';
+import { Users, Briefcase, BarChart3, Handshake, Rocket } from 'lucide-react';
 
 const StatCard = ({ title, value, color = 'blue' }: { title: string; value: string | number; color?: string }) => {
   const colors: Record<string, string> = {
     blue: 'bg-blue-50 text-blue-600', green: 'bg-green-50 text-green-600',
     purple: 'bg-purple-50 text-purple-600', orange: 'bg-orange-50 text-orange-600', red: 'bg-red-50 text-red-600',
   };
-  const emojis: Record<string, string> = { blue: '👥', green: '💼', purple: '📊', orange: '🤝', red: '🚀' };
+  const icons: Record<string, React.ReactNode> = {
+    blue: <Users size={24} />,
+    green: <Briefcase size={24} />,
+    purple: <BarChart3 size={24} />,
+    orange: <Handshake size={24} />,
+    red: <Rocket size={24} />
+  };
   return (
     <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-white/40 p-5 shadow-sm hover:shadow-lg transition-shadow">
       <div className="flex items-center justify-between">
@@ -17,7 +24,7 @@ const StatCard = ({ title, value, color = 'blue' }: { title: string; value: stri
           <p className="text-sm font-medium text-slate-500">{title}</p>
           <p className="text-2xl font-bold text-slate-900 mt-1">{value}</p>
         </div>
-        <div className={`w-11 h-11 rounded-xl ${colors[color]} flex items-center justify-center text-xl`}>{emojis[color]}</div>
+        <div className={`w-11 h-11 rounded-xl ${colors[color]} flex items-center justify-center`}>{icons[color]}</div>
       </div>
     </div>
   );
